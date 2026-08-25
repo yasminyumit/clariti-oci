@@ -206,13 +206,13 @@ Adotando o **Oracle Ethics Shield (OES)**, o projeto trata governança de forma 
 ---
 
 ## 10. 👥 Equipe
-Filipe Santos de Oliveira | <a href="https://github.com/Pruppety" target="_blank"><img loading="lazy" src="https://github.com/devicons/devicon/blob/v2.17.0/icons/github/github-original.svg" target="_blank" width="100" ></a>
+Filipe Santos de Oliveira | <a href="https://github.com/Pruppety" target="_blank"><img loading="lazy" src="https://github.com/devicons/devicon/blob/v2.17.0/icons/github/github-original.svg" target="_blank" width="50" ></a>
 
-Giovanni Pascon Corrêa | <a href="https://github.com/gigio-jpeg" target="_blank"><img loading="lazy" src="https://github.com/devicons/devicon/blob/v2.17.0/icons/github/github-original.svg" target="_blank" width="100"></a> 
+Giovanni Pascon Corrêa | <a href="https://github.com/gigio-jpeg" target="_blank"><img loading="lazy" src="https://github.com/devicons/devicon/blob/v2.17.0/icons/github/github-original.svg" target="_blank" width="50"></a> 
 
-Nicolas Fois Lima | <a href="https://github.com/nifois11" target="_blank"><img loading="lazy" src="https://github.com/devicons/devicon/blob/v2.17.0/icons/github/github-original.svg" target="_blank" width="100"></a> 
+Nicolas Fois Lima | <a href="https://github.com/nifois11" target="_blank"><img loading="lazy" src="https://github.com/devicons/devicon/blob/v2.17.0/icons/github/github-original.svg" target="_blank" width="50"></a> 
 
-Vitor Matias do Nascimento | <a href="https://github.com/Data-Vitor" target="_blank"><img loading="lazy" src="https://github.com/devicons/devicon/blob/v2.17.0/icons/github/github-original.svg" target="_blank" width="100"></a>
+Vitor Matias do Nascimento | <a href="https://github.com/Data-Vitor" target="_blank"><img loading="lazy" src="https://github.com/devicons/devicon/blob/v2.17.0/icons/github/github-original.svg" target="_blank" width="50"></a>
 
 Yasmin Yumi Tsunokawa RM569408 | <a href="https://github.com/yasminyumit" target="_blank"><img loading="lazy" src="https://github.com/devicons/devicon/blob/v2.17.0/icons/github/github-original.svg" target="_blank" width="100"></a>
 
