@@ -1,14 +1,23 @@
 # 🏥 CLARITI: Inteligência Orçamentária e Acesso Hospitalar na Saúde Pública
 
-> **Enterprise Challenge: Oracle + FIAP — 2026**  
+> **Enterprise Challenge: Oracle + FIAP — 2026**
+> 
 > **Curso:** Data Science, Analytics, Agents & AI
+>
 > **Turma:** 1TSCPF  
+>
 > **Grupo:** Seraph
+>
 > **Integrantes:**
+>
 > Filipe Santos de Oliveira | @Pruppety
+>
 > Giovanni Pascon Corrêa | @gigio-jpeg
+>
 > Nicolas Fois Lima | @nifois11
+>
 > Vitor Matias do Nascimento | @Data-Vitor 
+>
 > Yasmin Yumi Tsunokawa | @yasminyumit
 
 
