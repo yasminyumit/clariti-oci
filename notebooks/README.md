@@ -28,11 +28,11 @@ A solução se apoia em três pilares, unificados no Oracle Autonomous AI Databa
 | `Baixar_CNES.py` | Extrai o cadastro de estabelecimentos e leitos via API (`pysus`) |
 | `Baixar_Populacao_IBGE.py` | Extrai população municipal via IBGE/SIDRA |
 | `Montar_Dataset_Unificado.py` | Consolida as três fontes no modelo estrela (Star Schema) |
-| **`AED_ICSAP_UTI_SP_10.ipynb`** | Análise Exploratória de Dados + Teste de Hipótese sobre o dataset unificado |
+| **`AED_ICSAP_UTI_SP_v16.ipynb`** | Análise Exploratória de Dados + Teste de Hipótese sobre o dataset unificado |
 
 ---
 
-## 📊 `AED_ICSAP_UTI_SP_10.ipynb` — Resumo
+## 📊 `AED_ICSAP_UTI_SP_v16.ipynb` — Resumo
 
 ### Objetivo
 
@@ -44,6 +44,8 @@ Este notebook conduz a **Análise Exploratória de Dados (AED)** do dataset unif
 |---|---|---|
 | `dataset_unificado_sp_2022_2024.parquet` | Bucket agregado (município + diagnóstico + ano + mês) | 463.299 linhas, representando 813.422 internações reais em UTI |
 | `painel_municipio_ano_sp_2022_2024.parquet` | Município × ano | 1.935 linhas (645 municípios × 3 anos), inclui dados SIOPS |
+| `perfil_paciente_sp_2022_2024.parquet` | Perfil do Paciente × SIH | ~813mil linhas (tabela em grão de paciente individual)
+
 
 Cobertura: 645 municípios de São Paulo, 2022–2024.
 
