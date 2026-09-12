@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CLARITI — Inteligência Orçamentária em Saúde Pública</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="topnav">
+  <div class="topnav-inner">
+    <button id="menu-toggle" class="menu-toggle" aria-label="Abrir menu" aria-expanded="false">☰</button>
+    <a href="index.html" class="brand">CLARITI<span>.</span></a>
+    <nav class="nav-links" aria-label="Navegação principal">
+      <a href="index.html">Início</a>
+      <a href="executivo.html">Executivo</a>
+      <a href="tatico.html">Tático</a>
+      <a href="clinico.html">Clínico</a>
+      <a href="metodologia.html">Metodologia</a>
+    </nav>
+    <div class="nav-controls">
+      <select id="year-select" class="year-select" aria-label="Ano de referência"></select>
+    </div>
+  </div>
+</header>
+
+<aside id="side-menu" class="side-menu" aria-label="Menu lateral">
+  <div class="side-menu-head"><span>CLARITI</span><button id="menu-close" aria-label="Fechar menu">×</button></div>
+  <div class="side-menu-context">Inteligência para a gestão pública</div>
+  <nav class="side-links">
+    <a href="index.html">Início <span>01</span></a>
+    <a href="executivo.html">Executivo <span>02</span></a>
+    <a href="tatico.html">Tático <span>03</span></a>
+    <a href="clinico.html">Clínico <span>04</span></a>
+    <a href="metodologia.html">Metodologia <span>05</span></a>
+    <a href="chatbot.html" class="side-ai">Assistente IA <span>→</span></a>
+  </nav>
+</aside>
+<div id="nav-overlay" class="nav-overlay"></div>
+
+<main>
+  <section class="hero">
+    <div class="shell">
+      <div class="hero-kicker">Oracle + FIAP Challenge 2026</div>
+      <h1>Onde o orçamento da saúde está parando de funcionar.</h1>
+      <p>
+        O CLARITI cruza internações evitáveis (ICSAP), execução orçamentária do SUS e
+        capacidade instalada de leitos por município de São Paulo, para mostrar a gestores
+        e secretarias onde o investimento em atenção primária está — ou não está — reduzindo
+        internações que nunca deveriam ter acontecido.
+      </p>
+      <div class="hero-stats">
+        <div>
+          <span class="hero-stat-value">645</span>
+          <span class="hero-stat-label">municípios de SP monitorados</span>
+        </div>
+        <div>
+          <span class="hero-stat-value">3</span>
+          <span class="hero-stat-label">fontes públicas cruzadas — SIH/SUS, SIOPS, CNES</span>
+        </div>
+        <div>
+          <span class="hero-stat-value">2022–24</span>
+          <span class="hero-stat-label">janela de dados analisada</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="shell">
+    <h2 style="margin-top:44px;">Três níveis de análise, do orçamento ao paciente</h2>
+    <p>Cada nível abre no seguinte por clique — comece pelo panorama estadual e desça até o perfil clínico por trás de um diagnóstico específico.</p>
+
+    <div class="level-nav">
+      <a href="executivo.html" class="level-card">
+        <div class="level-num">Nível 1 — Estratégico</div>
+        <h3>Dashboard Executivo</h3>
+        <p>Taxa de ICSAP, custo médio, funil de execução orçamentária e a relação entre investimento per capita e internações evitáveis, por município e ano.</p>
+      </a>
+      <a href="tatico.html" class="level-card">
+        <div class="level-num">Nível 2 — Tático</div>
+        <h3>Pressão por Diagnóstico</h3>
+        <p>Dentro de um município, quais diagnósticos concentram volume e custo, sazonalidade mensal e composição de leitos.</p>
+      </a>
+      <a href="clinico.html" class="level-card">
+        <div class="level-num">Nível 3 — Clínico</div>
+        <h3>Perfil do Paciente</h3>
+        <p>Distribuição por grupo CSAP, perfil etário, taxa de UTI e os indicadores que exigem leitura cuidadosa antes de virar decisão.</p>
+      </a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="shell">CLARITI — Oracle + FIAP Challenge 2026. Fontes: SIH/SUS, CNES, SIOPS, IBGE.</div>
+</footer>
+
+<script src="js/api.js"></script>
+<script src="js/nav.js"></script>
+</body>
+</html>

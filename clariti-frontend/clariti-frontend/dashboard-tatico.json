@@ -1,0 +1,14 @@
+{
+  "solicitacao": {
+    "dashboard": "Tatico",
+    "objetivo": "visualizar os dados de forma mais clara e intuitiva",
+    "funcionalidades_desejadas": [
+      "gráficos interativos",
+      "filtros para análise de métricas"
+    ],
+    "visualizacoes_especificas": [
+      "gráficos por volume",
+      "ranking por diagnóstico"
+    ]
+  }
+}

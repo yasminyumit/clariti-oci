@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Executivo — CLARITI</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+</head>
+<body>
+
+<header class="topnav">
+  <div class="topnav-inner">
+    <button id="menu-toggle" class="menu-toggle" aria-label="Abrir menu" aria-expanded="false">☰</button>
+    <a href="index.html" class="brand">CLARITI<span>.</span></a>
+    <nav class="nav-links">
+      <a href="index.html">Início</a>
+      <a href="executivo.html">Executivo</a>
+      <a href="tatico.html">Tático</a>
+      <a href="clinico.html">Clínico</a>
+      <a href="metodologia.html">Metodologia</a>
+    </nav>
+    <div class="nav-controls">
+      <select id="year-select" class="year-select" aria-label="Ano de referência"></select>
+    </div>
+  </div>
+</header>
+
+<aside id="side-menu" class="side-menu" aria-label="Menu lateral">
+  <div class="side-menu-head"><span>CLARITI</span><button id="menu-close" aria-label="Fechar menu">×</button></div>
+  <div class="side-menu-context">Inteligência para a gestão pública</div>
+  <nav class="side-links">
+    <a href="index.html">Início <span>01</span></a><a href="executivo.html">Executivo <span>02</span></a><a href="tatico.html">Tático <span>03</span></a><a href="clinico.html">Clínico <span>04</span></a><a href="metodologia.html">Metodologia <span>05</span></a><a href="chatbot.html" class="side-ai">Assistente IA <span>→</span></a>
+  </nav>
+</aside><div id="nav-overlay" class="nav-overlay"></div>
+
+<main>
+  <div class="shell">
+    <div class="page-header">
+      <div class="eyebrow">NÍVEL 1 · ESTADO DE SÃO PAULO</div>
+      <div class="page-header-row">
+        <div>
+          <h1>Dashboard Executivo</h1>
+          <p>Panorama estadual de internações evitáveis e execução orçamentária, por ano.</p>
+        </div>
+        <button id="gerar-btn" class="generate-btn">Gerar dashboard</button>
+      </div>
+    </div>
+
+    <div id="kpi-row" class="kpi-row">
+      <!-- preenchido via JS -->
+    </div>
+
+    <div class="panel panel-full map-panel">
+      <div class="map-panel-head">
+        <div>
+          <h3 class="panel-title">Mapa de municípios — Taxa de ICSAP</h3>
+          <p class="panel-note">Use zoom e arraste para explorar. Clique num município para abrir o nível tático.</p>
+        </div>
+        <div class="map-legend" aria-label="Legenda da taxa de ICSAP">
+          <span><i class="legend-dot low"></i> menor</span>
+          <span><i class="legend-dot high"></i> maior</span>
+        </div>
+      </div>
+      <div id="icsap-map" class="icsap-map" aria-label="Mapa interativo de municípios de São Paulo"></div>
+      <div id="map-unavailable" class="data-unavailable" hidden>Mapa indisponível para este ano.</div>
+    </div>
+
+    <div class="panel-grid">
+      <div class="panel">
+        <h3 class="panel-title">Ranking de municípios — Taxa de ICSAP</h3>
+        <p class="panel-note">Top 15 municípios por % de internações sensíveis à atenção primária. Clique numa barra para abrir o nível tático.</p>
+        <canvas id="chart-ranking"></canvas>
+      </div>
+
+      <div class="panel">
+        <h3 class="panel-title">Execução orçamentária</h3>
+        <p class="panel-note">Dotação → Empenhado → Liquidado → Pago.</p>
+        <div id="funil"></div>
+        <div class="callout">Queda entre "Empenhado" e "Liquidado" indica gargalo de execução, não falta de orçamento.</div>
+      </div>
+    </div>
+
+    <div class="panel panel-full">
+      <h3 class="panel-title">Investimento per capita × Taxa de ICSAP</h3>
+      <p class="panel-note">Tamanho da bolha = população do município.</p>
+      <canvas id="chart-scatter" style="max-height:340px;"></canvas>
+      <div class="callout">
+        O tamanho do município (população) confunde essa relação — municípios maiores têm custo fixo de
+        infraestrutura diluído e tendem a investimento per capita menor, independente da eficiência da rede.
+        Ver <a href="metodologia.html">nota metodológica</a>.
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="shell">CLARITI — Oracle + FIAP Challenge 2026. Fontes: SIH/SUS, CNES, SIOPS, IBGE.</div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="js/api.js"></script>
+<script src="js/nav.js"></script>
+<script src="js/executivo.js"></script>
+</body>
+</html>
