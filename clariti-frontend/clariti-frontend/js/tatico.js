@@ -44,6 +44,12 @@ async function carregarTatico() {
   const formatarLeito = (valor) => valor === null || valor === undefined ? "indisponível" : valor;
 
   container.innerHTML = `
+    <div class="panel panel-full seasonality-panel">
+      <div class="section-kicker">VISÃO TEMPORAL</div>
+      <h3 class="panel-title">Sazonalidade mensal</h3>
+      <p class="panel-note">Evolução temporal das internações ao longo do ano.</p>
+      <canvas id="chart-sazonalidade"></canvas>
+    </div>
     <div class="panel panel-full tactical-controls">
       <div>
         <h3 class="panel-title">Filtros de análise</h3>
@@ -76,11 +82,11 @@ async function carregarTatico() {
         <h3 class="panel-title">Ranking por diagnóstico</h3>
         <p class="panel-note">Clique numa barra ou item para abrir o perfil clínico.</p>
         <canvas id="chart-ranking-diagnosticos"></canvas>
-        <div id="lista-diag"></div>
       </div>
-      <div class="panel">
-        <h3 class="panel-title">Sazonalidade mensal</h3>
-        <canvas id="chart-sazonalidade"></canvas>
+      <div class="panel diagnostico-details-panel">
+        <h3 class="panel-title">Detalhes por diagnóstico</h3>
+        <p class="panel-note">Selecione um card para abrir o perfil clínico.</p>
+        <div id="lista-diag"></div>
       </div>
     </div>
     <div class="panel panel-full">

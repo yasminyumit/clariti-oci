@@ -20,8 +20,8 @@ const CLARITI_CONFIG = {
 
   // TODO: preencher com o endpoint do módulo PL/SQL do Select AI, ex.:
   // "https://<host>/ords/<schema>/clariti/chat/"
-  SELECT_AI_ENDPOINT: "",
-};
+ SELECT_AI_ENDPOINT: "https://g2fbcde454b473d-bx7cjasthbglzaq5.adb.sa-saopaulo-1.oraclecloudapps.com/ords/admin/clariti/chat/",
+}
 
 /** Helper genérico de fetch com tratamento de erro consistente. */
 async function claritiFetch(url, options = {}) {
@@ -143,21 +143,86 @@ function getMockClinico() {
 /* ------------------------------------------------------------------ */
 /* Select AI — chatbot                                                  */
 /* ------------------------------------------------------------------ */
+const CONVERSATION_ID_KEY = "clariti_conversation_id";
+
+function getConversationId() {
+  return localStorage.getItem(CONVERSATION_ID_KEY); // pode ser null — e está tudo bem
+}
+
+function setConversationId(id) {
+  localStorage.setItem(CONVERSATION_ID_KEY, id);
+}
+
+function resetConversationId() {
+  localStorage.removeItem(CONVERSATION_ID_KEY);
+}
 
 async function askClaritiAI(pergunta) {
+  const conversationId = getConversationId(); // null na primeira pergunta
+
   if (CLARITI_CONFIG.MOCK_MODE) {
     return Promise.resolve(
       "(modo mock) Endpoint do Select AI ainda não conectado — configure SELECT_AI_ENDPOINT em js/api.js. " +
-      `Sua pergunta foi: "${pergunta}"`
+      `Sua pergunta foi: "${pergunta}" (conversation_id: ${conversationId ?? "novo"})`
     );
   }
+
+  const body = { prompt: pergunta };
+  if (conversationId) body.conversation_id = conversationId; // só manda se já existir
 
   const data = await claritiFetch(CLARITI_CONFIG.SELECT_AI_ENDPOINT, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ prompt: pergunta }),
+    body: JSON.stringify(body),
   });
-  return data.resposta;
+
+  // Sempre guarda o conversation_id que o Oracle devolveu — é ele que manda
+  if (data.conversation_id) {
+    setConversationId(data.conversation_id);
+  }
+
+  return {
+    text: data.resposta ?? data.resposta_texto ?? data.message ?? "",
+    chart: data.grafico ?? data.chart ?? data.visualizacao ?? await graficoParaPergunta(pergunta),
+  };
+}
+
+async function graficoParaPergunta(pergunta) {
+  const texto = String(pergunta).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  try {
+    if (texto.includes("municip") && (texto.includes("icsap") || texto.includes("taxa"))) {
+      const dados = await getPainelExecutivo(anoAtualSelecionado());
+      return {
+        title: "Municípios com maior taxa de ICSAP",
+        type: "bar",
+        data: dados.ranking_icsap,
+      };
+    }
+    if (texto.includes("empenhado") || texto.includes("liquidado") || texto.includes("orcament")) {
+      const dados = await getPainelExecutivo(anoAtualSelecionado());
+      return {
+        title: "Execução orçamentária",
+        labels: ["Dotação", "Empenhado", "Liquidado", "Pago"],
+        values: [dados.funil.dotacao, dados.funil.empenhado, dados.funil.liquidado, dados.funil.pago],
+      };
+    }
+    if (texto.includes("diagnostico") || texto.includes("internac") || texto.includes("custo")) {
+      const municipioCodigo = localStorage.getItem("clariti_municipio_6");
+      if (!municipioCodigo) return null;
+      const dados = await getPainelTatico(municipioCodigo, anoAtualSelecionado());
+      return { title: "Diagnósticos do município", data: dados.diagnosticos };
+    }
+    if (texto.includes("clinico") || texto.includes("paciente") || texto.includes("perfil")) {
+      const municipioCodigo = localStorage.getItem("clariti_municipio_6");
+      const diagnostico = localStorage.getItem("clariti_diag_princ");
+      if (!municipioCodigo || !diagnostico) return null;
+      const dados = await getPainelClinico(municipioCodigo, anoAtualSelecionado(), "", diagnostico);
+      return { title: "Perfil clínico", data: dados.grupo_csap };
+    }
+  } catch (error) {
+    console.warn("Não foi possível preparar o gráfico contextual:", error);
+  }
+  return null;
 }
 
 /* ------------------------------------------------------------------ */

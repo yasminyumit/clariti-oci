@@ -16,6 +16,7 @@
   --line: #D6E2ED;
   --muted: #718096;
   --radius: 3px;
+  --sidebar-width: 290px;
   --font-display: 'Source Serif 4', Georgia, serif;
   --font-ui: 'Inter', -apple-system, sans-serif;
   --font-num: 'IBM Plex Mono', ui-monospace, monospace;
@@ -27,6 +28,7 @@ html { scroll-behavior: smooth; }
 
 body {
   margin: 0;
+  padding-left: var(--sidebar-width);
   background: var(--paper);
   color: var(--ink);
   font-family: var(--font-ui);
@@ -82,6 +84,7 @@ button {
 }
 
 .menu-toggle {
+  display: none;
   width: 38px;
   height: 38px;
   border: 1px solid var(--line);
@@ -171,17 +174,17 @@ button {
 .side-menu {
   position: fixed;
   inset: 0 auto 0 0;
-  width: 290px;
+  width: var(--sidebar-width);
   padding: 22px 18px;
   background: var(--teal-dark);
   color: white;
-  transform: translateX(-100%);
+  overflow-y: auto;
   transition: transform 0.24s ease;
   z-index: 40;
   box-shadow: 14px 0 32px rgba(11, 61, 110, 0.18);
 }
 
-.side-menu.open { transform: translateX(0); }
+.side-menu-head button { display: none; }
 
 .side-menu-head {
   display: flex;
@@ -341,6 +344,58 @@ main { padding-bottom: 80px; }
 .panel:hover { border-color: #B9C9C1; }
 
 .panel-full { grid-column: 1 / -1; }
+.seasonality-panel {
+  margin-bottom: 30px;
+  border-top: 4px solid var(--teal);
+  background: linear-gradient(180deg, #F1F8FC 0%, var(--paper-raised) 34%);
+}
+.section-heading { margin: 0 0 14px; }
+.ranking-section-heading { border-left: 4px solid var(--brass); padding-left: 14px; }
+.section-heading h2 { margin: 0 0 4px; font-size: 1.35rem; }
+.section-heading p { margin: 0; font-size: 0.85rem; }
+.section-kicker {
+  margin-bottom: 5px;
+  color: var(--teal-dark);
+  font-family: var(--font-num);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.municipio-guide {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(360px, 1fr);
+  gap: 28px;
+  align-items: center;
+  margin-bottom: 16px;
+  padding: 22px 24px;
+  border: 2px solid var(--teal);
+  border-radius: var(--radius);
+  background: var(--teal-tint);
+}
+.municipio-guide-intro h2 { margin-bottom: 8px; font-size: 1.3rem; }
+.municipio-guide-intro p { margin: 0; font-size: 0.88rem; }
+.municipio-steps { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.municipio-steps li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--ink-soft);
+  font-size: 0.84rem;
+}
+.municipio-steps strong {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  flex: 0 0 26px;
+  border-radius: 50%;
+  background: var(--teal-dark);
+  color: white;
+  font-family: var(--font-num);
+  font-size: 0.7rem;
+}
+.municipio-steps b { color: var(--teal-dark); }
 
 .tactical-controls {
   display: grid;
@@ -348,6 +403,8 @@ main { padding-bottom: 80px; }
   gap: 22px;
   align-items: end;
   margin-bottom: 16px;
+  border-left: 4px solid var(--teal);
+  background: linear-gradient(90deg, var(--teal-tint) 0%, var(--paper-raised) 42%);
 }
 .filter-row { display: grid; grid-template-columns: 1.2fr 1fr 0.7fr; gap: 12px; }
 .filter-row label { display: grid; gap: 5px; color: var(--ink-soft); font-size: 0.74rem; font-weight: 600; }
@@ -368,6 +425,7 @@ main { padding-bottom: 80px; }
 #chart-ranking-diagnosticos { max-height: 300px; margin-bottom: 14px; }
 #lista-diag { display: grid; gap: 8px; }
 #lista-diag .diagnostico-button { margin: 0; text-align: left; }
+.diagnostico-details-panel { min-width: 0; }
 
 .map-panel { margin-bottom: 16px; }
 .map-panel-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 18px; }
@@ -394,6 +452,7 @@ main { padding-bottom: 80px; }
 }
 
 .panel canvas { max-height: 280px; }
+.seasonality-panel canvas { width: 100% !important; max-height: 320px; }
 
 .callout {
   margin-top: 14px;
@@ -469,6 +528,15 @@ main { padding-bottom: 80px; }
   border-bottom: 1px solid var(--line);
 }
 
+.hero-brand {
+  margin-bottom: 8px;
+  color: var(--teal-dark);
+  font-family: var(--font-display);
+  font-size: 2.4rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
 .hero-kicker {
   font-family: var(--font-num);
   font-size: 0.75rem;
@@ -519,6 +587,10 @@ main { padding-bottom: 80px; }
   padding: 12px 14px;
   text-align: left;
 }
+.diagnostico-button strong,
+.diagnostico-button span { display: block; }
+.diagnostico-button strong { margin-bottom: 4px; color: var(--teal-dark); }
+.diagnostico-button span { color: var(--ink-soft); font-size: 0.8rem; }
 
 .level-num {
   font-family: var(--font-num);
@@ -553,6 +625,19 @@ main { padding-bottom: 80px; }
 .tier-1 { background: var(--sage-tint); color: var(--sage); }
 .tier-2 { background: #F1E6D2; color: var(--brass); }
 .tier-3 { background: var(--brick-tint); color: var(--brick); }
+
+.data-quality-highlight {
+  margin-top: 14px;
+  padding: 18px 20px;
+  border-left: 4px solid var(--brass);
+  background: #F8F4EC;
+  color: var(--ink-soft);
+  font-style: italic;
+}
+.data-quality-highlight p { margin: 0 0 12px; }
+.data-quality-highlight p:last-child { margin-bottom: 0; }
+.data-quality-highlight strong { color: var(--ink); }
+.data-quality-sources { color: var(--muted); font-size: 0.82rem; }
 
 /* ---------- Chat widget ---------- */
 
@@ -679,6 +764,20 @@ main { padding-bottom: 80px; }
   font-size: 0.78rem;
 }
 .prompt-chip:hover { border-color: var(--teal); background: var(--teal-tint); }
+.chat-reset-btn {
+  display: block;
+  width: calc(100% - 36px);
+  margin: 12px 18px 18px;
+  border: 1px solid var(--teal);
+  border-radius: var(--radius);
+  background: var(--teal);
+  color: white;
+  padding: 10px 12px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  transition: background 0.18s ease, color 0.18s ease;
+}
+.chat-reset-btn:hover { background: var(--teal-dark); color: white; }
 
 .chat-card {
   min-height: 500px;
@@ -692,6 +791,12 @@ main { padding-bottom: 80px; }
 }
 .chat-card .chat-log { flex: 1; min-height: 350px; padding: 24px; display: flex; flex-direction: column; gap: 14px; overflow-y: auto; }
 .chat-card .chat-msg { max-width: 78%; padding: 12px 14px; font-size: 0.9rem; }
+.chat-response-chart {
+  display: block;
+  width: 100% !important;
+  max-height: 220px;
+  margin-top: 14px;
+}
 .chat-card .chat-input-row { min-height: 58px; background: var(--paper); }
 .chat-card .chat-input-row input { padding-left: 18px; }
 .chat-card .chat-input-row button { padding: 0 20px; }
@@ -708,8 +813,14 @@ footer {
 /* ---------- Responsive ---------- */
 
 @media (max-width: 880px) {
+  body { padding-left: 0; }
+  .menu-toggle { display: block; }
+  .side-menu { transform: translateX(-100%); }
+  .side-menu.open { transform: translateX(0); }
+  .side-menu-head button { display: block; }
   .kpi-row { grid-template-columns: repeat(2, 1fr); }
   .panel-grid { grid-template-columns: 1fr; }
+  .municipio-guide { grid-template-columns: 1fr; gap: 16px; }
   .level-nav { grid-template-columns: 1fr; }
   .topnav-inner { gap: 16px; overflow-x: auto; }
   .topnav-inner { height: auto; min-height: 60px; padding-top: 10px; padding-bottom: 10px; }

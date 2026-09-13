@@ -37,6 +37,7 @@ async function carregarClinico() {
   }
 
   const maxCasos = Math.max(...dados.grupo_csap.map((g) => g.casos));
+  const totalCasos = Number(dados.total_casos) || dados.grupo_csap.reduce((total, grupo) => total + Number(grupo.casos || 0), 0);
 
   container.innerHTML = `
     <div class="panel-grid">
@@ -55,6 +56,10 @@ async function carregarClinico() {
       <div class="panel">
         <h3 class="panel-title">Indicadores de cuidado</h3>
         <div class="kpi-card" style="margin-bottom:12px;">
+          <div class="kpi-label">Casos analisados</div>
+          <span class="kpi-value">${fmtNumero(totalCasos, 0)}</span>
+        </div>
+        <div class="kpi-card" style="margin-bottom:12px;">
           <div class="kpi-label">Taxa de UTI entre casos ICSAP</div>
           <span class="kpi-value">${fmtNumero(dados.taxa_uti_icsap, 1)}%</span>
         </div>
@@ -63,8 +68,9 @@ async function carregarClinico() {
           <span class="kpi-value">${fmtNumero(dados.reinternacao_30d, 1)}%</span>
         </div>
         <div class="callout">
-          Reinternação em 30 dias é Tier 3: sujeita a viés de sobrevivência. Não deve ser lida como
-          ranking de qualidade entre municípios. Ver <a href="metodologia.html">metodologia</a>.
+          Uma taxa alta pode indicar dificuldade na continuidade do cuidado, alta precoce ou maior
+          complexidade dos casos. Não deve ser interpretada isoladamente como falha do município,
+          pois depende do perfil dos pacientes e da gravidade dos casos. Ver <a href="metodologia.html">metodologia</a>.
         </div>
       </div>
     </div>
