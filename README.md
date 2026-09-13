@@ -6,20 +6,24 @@
 
 > **Equipe:** Seraph | **Turma:** 1TSCPF
 
+🔗 **Site publicado:** [clariti-oci.vercel.app](https://clariti-oci.vercel.app/?_vercel_share=89KgaQen8FBq2zPjFQPVzA3vjIG02uR8)
+> O link inclui um token de compartilhamento do Vercel (`_vercel_share=...`), que costuma ser temporário. Se parar de funcionar, gere um novo link de preview no painel do Vercel ou aponte para o domínio de produção sem o parâmetro.
+
 ---
 
 ## 📑 Índice
 
 1. [Visão Geral da Solução](#1--visão-geral-da-solução)
-2. [Fluxo do Projeto](#2--fluxo-do-projeto-da-fonte-de-dados-à-decisão-do-gestor)
-3. [Stack Tecnológico](#3--stack-tecnológico)
-4. [Engenharia de Dados: Fontes e Decisões Técnicas](#4--engenharia-de-dados-fontes-e-decisões-técnicas)
-5. [Modelagem, Privacidade (LGPD) e Perfil do Paciente](#5--modelagem-privacidade-lgpd-e-perfil-do-paciente)
-6. [Select AI: Autonomia para o Gestor](#6--select-ai-autonomia-para-o-gestor)
-7. [Indicadores de Desempenho (KPIs)](#7--indicadores-de-desempenho-e-saúde-orçamentária-kpis)
-8. [Governança, Segurança e COBIT 2019](#8--governança-segurança-e-cobit-2019)
-9. [Estrutura do Repositório](#9--estrutura-do-repositório)
-10. [Equipe](#10--equipe)
+2. [Achado Central e Rigor Metodológico](#2--achado-central-e-rigor-metodológico)
+3. [Fluxo do Projeto (da Fonte de Dados à Decisão do Gestor)](#3--fluxo-do-projeto-da-fonte-de-dados-à-decisão-do-gestor)
+4. [Stack Tecnológico](#4--stack-tecnológico)
+5. [Engenharia de Dados: Fontes e Decisões Técnicas](#5--engenharia-de-dados-fontes-e-decisões-técnicas)
+6. [Modelagem, Privacidade (LGPD) e Perfil do Paciente](#6--modelagem-privacidade-lgpd-e-perfil-do-paciente)
+7. [Select AI: Autonomia para o Gestor](#7--select-ai-autonomia-para-o-gestor)
+8. [Indicadores de Desempenho (KPIs)](#8--indicadores-de-desempenho-e-saúde-orçamentária-kpis)
+9. [Governança, Segurança e COBIT 2019](#9--governança-segurança-e-cobit-2019)
+10. [Estrutura do Repositório](#10--estrutura-do-repositório)
+11. [Equipe](#11--equipe)
 
 ---
 
@@ -27,24 +31,25 @@
 
 ### O que é o CLARITI?
 
-O **CLARITI** é uma plataforma que transforma dados públicos e fragmentados do SUS em **decisões concretas de orçamento** para a saúde pública. Ele nasce a partir do desafio oficial da Oracle — construir um Painel Inteligente de Acesso Hospitalar e Perfil de Atendimento — e vai um passo além: em vez de só *mostrar* onde a rede hospitalar está sob pressão, o CLARITI **prevê** essa pressão e recomenda **onde realocar recursos financeiros antes que o problema vire crise**.
+O **CLARITI** é uma plataforma que transforma dados públicos e fragmentados do SUS em **decisões concretas de orçamento** para a saúde pública. Ele nasce a partir do desafio oficial da Oracle — construir um Painel Inteligente de Acesso Hospitalar e Perfil de Atendimento — e vai um passo além: em vez de só *mostrar* onde a rede hospitalar está sob pressão, o CLARITI ajuda o gestor a entender **onde e por que** investir, com o rigor estatístico pra não confundir correlação com causa (ver seção 2).
 
-Na prática, o CLARITI substitui um fluxo hoje lento e manual — gestor pede um relatório → analista escreve SQL → relatório demora dias — por um fluxo direto: **gestor pergunta em português, o sistema já entende o padrão de risco e aponta a ação**.
+Na prática, o CLARITI substitui um fluxo hoje lento e manual — gestor pede um relatório → analista escreve SQL → relatório demora dias — por um fluxo direto: **gestor navega por um painel em três níveis de profundidade, ou pergunta em português direto pro banco.**
 
 ### Qual problema o CLARITI resolve?
 
-Hoje, secretarias de saúde precisam responder perguntas como "onde as internações estão crescendo?" ou "qual hospital vai estourar a capacidade?" **sem depender de um analista técnico disponível o tempo todo**. Isso atrasa decisões que, na saúde pública, custam caro — tanto em dinheiro quanto em vidas.
+Hoje, secretarias de saúde precisam responder perguntas como "onde as internações estão crescendo?" ou "o investimento em atenção primária está realmente evitando internações evitáveis?" **sem depender de um analista técnico disponível o tempo todo**. Isso atrasa decisões que, na saúde pública, custam caro — tanto em dinheiro quanto em vidas.
 
-> **Tese central do projeto:** municípios que investem adequadamente em Atenção Primária à Saúde (APS) apresentam menos internações evitáveis (**ICSAP** — Condições Sensíveis à Atenção Primária) e menos reinternações precoces. O CLARITI usa essa tese como fio condutor: ele mede, com dados reais, se o dinheiro está indo para o lugar certo.
+> **Tese que motivou o projeto:** municípios que investem mais em Atenção Primária à Saúde (APS) apresentam menos internações evitáveis (**ICSAP** — Condições Sensíveis à Atenção Primária). O CLARITI testou essa tese com dados reais — e o resultado tem uma nuance importante, detalhada na seção 2.
 
-### O que a solução entrega (MVP em 4 módulos)
+### O que a solução entrega
 
-| Módulo | O que faz | Por que importa |
+| Nível / Módulo | O que faz | Por que importa |
 |---|---|---|
-| **Dashboard Executivo** | Reúne em um só painel os KPIs de internações, custo, ocupação e capacidade | Dá ao gestor uma visão completa sem precisar cruzar relatórios manualmente |
-| **Pergunte ao Banco** (Select AI) | O gestor digita uma pergunta em português e recebe a resposta direto do banco | Elimina a espera por um analista SQL para cada nova dúvida |
-| **Análise de Pressão Assistencial** | Cruza demanda (internações), capacidade (leitos) e população | Mostra objetivamente **onde** a rede está mais sobrecarregada |
-| **Camada Preventiva** (Machine Learning) | Usa o histórico para prever saturação hospitalar e risco de reinternação | Transforma o painel de reativo em **preventivo** — dá tempo de agir antes do colapso |
+| **Dashboard Executivo** (nível 1) | KPIs estaduais, ranking de municípios por taxa de ICSAP, mapa interativo, funil orçamentário (dotação → empenhado → liquidado → pago), scatter investimento × ICSAP | Visão completa do estado sem cruzar relatórios manualmente |
+| **Dashboard Tático** (nível 2) | Diagnósticos que mais pesam num município específico, sazonalidade mensal, mix de leitos | Mostra objetivamente onde a rede está mais sobrecarregada dentro do município escolhido |
+| **Dashboard Clínico** (nível 3) | Perfil agregado por grupo CSAP, taxa de UTI, reinternação em 30 dias, por trás de um diagnóstico específico | Desce até o padrão clínico que está gerando a pressão vista nos níveis acima |
+| **Pergunte ao Banco** (Select AI) | Gestor digita uma pergunta em português e recebe a resposta direto do banco | Elimina a espera por um analista SQL para cada nova dúvida |
+| **Metodologia** | Documenta o sistema de Tiers de confiabilidade de cada indicador (seção 2) | Garante que nenhum número vire decisão sem o contexto certo |
 
 ### Para quem é o CLARITI?
 
@@ -52,9 +57,31 @@ Secretarias municipais e estaduais de saúde, gestores de redes hospitalares e �
 
 ---
 
-## 2. 🔄 Fluxo do Projeto (da Fonte de Dados à Decisão do Gestor)
+## 2. 🔬 Achado Central e Rigor Metodológico
 
-Esta seção explica, passo a passo, o caminho que o dado percorre desde a base bruta do DATASUS até a recomendação que chega ao gestor de saúde.
+A tese que abre este documento foi **testada estatisticamente contra os dados reais**, não apenas assumida como verdadeira.
+
+**Resultado:** o teste de Mann-Whitney aplicado **não confirmou** essa relação de forma direta. O que os dados mostram é que o **porte do município atua como variável de confusão**: municípios maiores diluem custo fixo de infraestrutura e por isso tendem a ter investimento per capita menor — independentemente da eficiência real da rede de saúde ali. Ou seja, "menos investimento per capita" muitas vezes só significa "cidade grande", não "gestão pior".
+
+Isso não é um resultado negativo do projeto — é exatamente o tipo de rigor que separa uma tese apresentada como fato de uma tese testada com honestidade. Por isso, no painel, essa relação **nunca aparece como card isolado de correlação**: ela é sempre exibida como gráfico de dispersão com o porte do município como terceira variável (tamanho da bolha), acompanhada da ressalva por escrito.
+
+### Sistema de confiabilidade dos indicadores (Tiers)
+
+Pra essa honestidade metodológica não depender de lembrar caso a caso, todo indicador do painel é classificado em um de três níveis, documentados na página **Metodologia** do sistema:
+
+| Tier | Significado | Exemplo |
+|---|---|---|
+| **1 — Indicador direto** | Sem risco relevante de indução a erro; vira card ou gráfico simples sem nota extra | Taxa de internação por 1.000 habitantes |
+| **2 — Precisa de framing contextual** | Número real, mas isolado induz conclusão errada; exige variável de contexto ou nota fixa | Investimento per capita × Taxa de ICSAP |
+| **3 — Não vira gatilho automático** | Tem limitação metodológica conhecida; aparece só em leitura técnica, nunca como alerta automático | Reinternação em 30 dias (viés de sobrevivência — o paciente precisa sobreviver e receber alta pra "contar") |
+
+O mesmo cuidado vale pro indicador `CHAVE_COLISAO_SUSPEITA`: como o SIH/SUS não tem ID único de paciente, essa chave (ver seção 6) é construída por combinação de campos e está sujeita a colisão. Não é um indicador de saúde — é um indicador de qualidade de dado, e por isso vive numa trilha de auditoria administrativa, não no painel público do gestor.
+
+---
+
+## 3. 🔄 Fluxo do Projeto (da Fonte de Dados à Decisão do Gestor)
+
+Esta seção explica, passo a passo, o caminho que o dado percorre desde a base bruta do DATASUS até a decisão que chega ao gestor de saúde.
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────┐
@@ -80,19 +107,22 @@ Esta seção explica, passo a passo, o caminho que o dado percorre desde a base 
                      ┌───────────────┴────────────────┐
                      ▼                                  ▼
      ┌───────────────────────────────┐   ┌──────────────────────────────────┐
-     │ ETAPA 4A — SELECT AI            │   │ ETAPA 4B — ML + GEORREFERENCIAMENTO│
-     │ Pergunta em português           │   │ Previsão de saturação, clusters   │
-     │ → SQL gerado automaticamente    │   │ de risco, sinal de reinternação   │
+     │ ETAPA 4A — SELECT AI            │   │ ETAPA 4B — ANÁLISE ESTATÍSTICA     │
+     │ Pergunta em português           │   │ Teste de Mann-Whitney, análise de │
+     │ → SQL gerado automaticamente    │   │ confusão por porte do município   │
      └────────────────┬────────────────┘   └───────────────────┬────────────────┘
                        └───────────────┬───────────────────────┘
                                        ▼
 ┌──────────────────────────────────────────────────────────────────────────┐
-│ ETAPA 5 — PAINEL EXECUTIVO (Dashboard / Oracle APEX)                     │
-│ KPIs de custo, ociosidade e produtividade  ·  Mapas de pressão regional  │
+│ ETAPA 5 — API E PAINEL (ORDS + Frontend próprio)                         │
+│ ORDS expõe o modelo estrela como REST  ·  HTML/CSS/JS + Chart.js/Leaflet │
+│ 3 níveis de dashboard + mapa interativo + assistente em linguagem natural│
 └───────────────────────────────────┬──────────────────────────────────────┘
                                      ▼
+                          DEPLOY — Vercel (site estático)
+                                     ▼
                        DECISÃO DO GESTOR DE SAÚDE
-        (onde e quando realocar orçamento antes do colapso da rede)
+        (onde investir e por que — com a ressalva certa em cada número)
 ```
 
 ### Explicando cada etapa
@@ -107,30 +137,35 @@ Três scripts em Python cuidam de buscar e limpar os dados na origem:
 O Apache Airflow organiza essas extrações em uma DAG com quatro fases fixas — **ingestão, transformação, validação e carga analítica** — garantindo que o dado só avance para o banco depois de passar por checagens de qualidade.
 
 **Etapa 3 — Convergência no Oracle Database.**
-O script `Montar_Dataset_Unificado.py` junta as três fontes em um **modelo estrela (star schema)**, com a tabela fato "Perfil de Paciente" na granularidade de internação individual em UTI. É aqui que o CLARITI cumpre o requisito de *Single Source of Truth*: os formatos relacional, JSON e CSV deixam de existir separados e passam a conversar entre si dentro do Oracle Autonomous AI Database. Nesta etapa também é feito o enriquecimento semântico (`COMMENT ON TABLE` / `COMMENT ON COLUMN`), essencial para a próxima fase funcionar bem.
+O script `Montar_Dataset_Unificado.py` junta as três fontes em um **modelo estrela (star schema)**, com a tabela fato "Perfil de Paciente" na granularidade de internação individual em UTI. É aqui que o CLARITI cumpre o requisito de *Single Source of Truth*: os formatos relacional, JSON e CSV deixam de existir separados e passam a conversar entre si dentro do Oracle Autonomous AI Database. Nesta etapa também é feito o enriquecimento semântico (`COMMENT ON TABLE` / `COMMENT ON COLUMN`), essencial pra próxima fase funcionar bem.
 
 **Etapa 4 — Inteligência (em paralelo).**
 A partir do dado convergido, dois caminhos rodam lado a lado:
 - **Select AI** traduz a pergunta em português do gestor em SQL executável, sem que ele precise conhecer a estrutura das tabelas — isso só funciona bem *porque* a Etapa 3 documentou tudo em linguagem de negócio;
-- **ML + Georreferenciamento** analisa o histórico para prever saturação hospitalar, agrupar regiões por perfil de risco e sinalizar reinternações em até 30 dias — o indicador que mede, na prática, o fracasso ou sucesso da atenção primária.
+- **Análise estatística** aplica o teste de Mann-Whitney sobre investimento per capita × taxa de ICSAP e identifica o porte do município como variável de confusão (ver seção 2) — esse resultado é o que define como cada indicador pode (ou não pode) aparecer no painel.
 
-**Etapa 5 — Painel Executivo e Decisão.**
-Os resultados das duas frentes chegam ao painel (Oracle APEX / dashboard), que traduz tudo em KPIs de custo, ociosidade e produtividade, além de mapas de pressão. É esse painel que o gestor usa para decidir **onde** e **quando** mover orçamento — fechando o ciclo entre dado bruto e ação de gestão.
+**Etapa 5 — API e Painel.**
+Diferente da tentativa inicial (montar o painel direto no Oracle APEX com o wizard "Create Page"), essa abordagem foi abandonada porque o wizard cria uma página inteira por vez, o tipo "Dashboard" só suporta layout fixo com gráficos limitados (sem funil, sem bubble chart), e a seleção de tabela é manual numa LOV — a IA do wizard não lia o nome da tabela em texto livre e caía em dado de amostra. A decisão foi expor o modelo estrela via **ORDS** (Oracle REST Data Services, Auto-REST nativo do ADB) e consumir isso num **frontend próprio** — HTML/CSS/JS vanilla, Chart.js pros gráficos e Leaflet/OpenStreetMap pro mapa interativo de municípios — com os três níveis de dashboard e o assistente Select AI como página dedicada.
+
+**Etapa 6 — Deploy e Decisão.**
+O frontend é publicado como site estático no **Vercel**. É esse painel que o gestor usa pra decidir onde e quando mover orçamento — fechando o ciclo entre dado bruto, teste estatístico e ação de gestão.
 
 ---
 
-## 3. 🏗️ Stack Tecnológico
+## 4. 🏗️ Stack Tecnológico
 
-- **Cloud & Banco de Dados:** Oracle Autonomous AI Database (compatível com as versões 23ai e 26 AI), provisionado na Oracle Cloud Infrastructure (OCI)
+- **Cloud & Banco de Dados:** Oracle Autonomous AI Database (compatível com as versões 23ai e 26 AI), provisionado na Oracle Cloud Infrastructure (OCI), região `sa-saopaulo-1`
 - **Acesso e Conexão:** Oracle SQL Developer configurado via *Cloud Wallet* (`.zip`)
 - **Orquestração de Pipeline:** Apache Airflow (arquitetura Lambda/Kappa)
 - **Engenharia em Python:** extração, limpeza (AED) e consolidação da base em `.parquet`
-- **IA Generativa:** Oracle Select AI, gerando SQL a partir de linguagem natural
-- **Visualização:** Oracle APEX / Dashboard
+- **API:** ORDS (Oracle REST Data Services) — expõe o modelo estrela como REST pro frontend consumir
+- **IA Generativa:** Oracle Select AI, modelo Cohere `command-a-03-2025` via OCI Generative AI, gerando SQL a partir de linguagem natural
+- **Frontend:** HTML/CSS/JS vanilla, Chart.js (gráficos), Leaflet + OpenStreetMap (mapa interativo)
+- **Deploy:** Vercel (site estático)
 
 ---
 
-## 4. 📊 Engenharia de Dados: Fontes e Decisões Técnicas
+## 5. 📊 Engenharia de Dados: Fontes e Decisões Técnicas
 
 A plataforma implementa o conceito de *Single Source of Truth* ao unificar formatos distintos em um Dataset Unificado para o estado de São Paulo (2022–2024).
 
@@ -138,26 +173,30 @@ A plataforma implementa o conceito de *Single Source of Truth* ao unificar forma
 | :--- | :--- | :--- |
 | **SIH/SUS** | Estruturado (`.dbc`) | Dados de internações em UTI, valores pagos e permanência média. **Decisão técnica:** a extração foi feita via FTP direto do DATASUS, pois o catálogo da biblioteca `pysus` apresentou inconsistências (incompleto) para o SIH no recorte avaliado. |
 | **CNES** | Semiestruturado (`JSON` via API) | Cadastro de estabelecimentos e infraestrutura (leitos SUS/não-SUS), obtido com sucesso via biblioteca `pysus`. |
+| **SIOPS** | Auxiliar (defasado 1 ano) | Execução orçamentária municipal (dotação, empenhado, liquidado, pago) — base do funil orçamentário do Dashboard Executivo. |
 | **IBGE (SIDRA)** | Auxiliar (`CSV`/API) | População municipal, usada para cálculos de taxa (por 10 mil habitantes). **Decisão técnica:** como o IBGE não publicou estimativas para 2022/2023, o censo de 2022 foi replicado para 2023, evitando lacunas na série temporal. |
 
 ---
 
-## 5. 🧠 Modelagem, Privacidade (LGPD) e Perfil do Paciente
+## 6. 🧠 Modelagem, Privacidade (LGPD) e Perfil do Paciente
 
 O modelo relacional foi desenhado respeitando a granularidade de **internação individual em UTI** (mais de 800 mil registros) na tabela fato "Perfil de Paciente".
 
 ### 🛡️ Privacidade (LGPD) e o sinal de reinternação em 30 dias
 
-Um dos diferenciais preditivos do CLARITI é o indicador `FL_REINTERNACAO_30D`, que sinaliza o fracasso da atenção primária quando um paciente retorna ao hospital em menos de 30 dias.
+Um dos indicadores mais sensíveis do CLARITI é `FL_REINTERNACAO_30D`, que sinaliza quando um paciente retorna ao hospital em menos de 30 dias (classificado como Tier 3 — ver seção 2, por conta do viés de sobrevivência).
 
 - Como a base do SIH/SUS não traz CPF, para agrupar internações do mesmo paciente **sem violar a LGPD**, foi gerada uma chave temporária ("impressão digital") cruzando *Data de Nascimento + Sexo + CEP*.
 - Essa chave foi usada **apenas** para o agrupamento estatístico e **descartada** do banco final — o dataset persiste apenas resultados agregados e não identificáveis (abordagem *Zero-Trust Data*).
+- Essa mesma chave, por ser construída via combinação de campos (não um ID único real), está sujeita a colisão — por isso vive como indicador de qualidade de dado (`CHAVE_COLISAO_SUSPEITA`) numa trilha de auditoria administrativa, não no painel público do gestor.
 
 ---
 
-## 6. 💬 Select AI: Autonomia para o Gestor
+## 7. 💬 Select AI: Autonomia para o Gestor
 
 O CLARITI dá autonomia total aos gestores de saúde, permitindo explorar a base sem qualquer conhecimento em SQL. Para que o Select AI responda com precisão, toda a estrutura DDL foi enriquecida com `COMMENT ON TABLE` e `COMMENT ON COLUMN`, traduzindo nomes técnicos em contexto gerencial.
+
+O endpoint está publicado via ORDS e testado em produção, incluindo continuidade de contexto entre perguntas (`conversation_id`) dentro da mesma sessão do assistente — o gestor pode fazer uma pergunta de acompanhamento sem repetir o contexto.
 
 **Exemplos de pergunta que o painel responde:**
 - *"Quais municípios estão com maior pressão assistencial?"*
@@ -166,7 +205,7 @@ O CLARITI dá autonomia total aos gestores de saúde, permitindo explorar a base
 
 ---
 
-## 7. 📈 Indicadores de Desempenho e Saúde Orçamentária (KPIs)
+## 8. 📈 Indicadores de Desempenho e Saúde Orçamentária (KPIs)
 
 O painel reflete cruzamentos cruciais para detectar ineficiência hospitalar:
 
@@ -174,9 +213,11 @@ O painel reflete cruzamentos cruciais para detectar ineficiência hospitalar:
 2. **Índice de ociosidade e custo de leito inativo** — relaciona leitos cadastrados (CNES) com dias reais de ocupação (SIH) para calcular o custo de estruturas improdutivas.
 3. **Produtividade financeira por equipamento crítico** — cruza equipamentos (tomógrafos, ressonâncias) com faturamento no SIH, evitando pagamentos por manutenção de maquinário inativo.
 
+Todo indicador novo passa pelo sistema de Tiers da seção 2 antes de virar card no painel.
+
 ---
 
-## 8. ⚖️ Governança, Segurança e COBIT 2019
+## 9. ⚖️ Governança, Segurança e COBIT 2019
 
 Adotando o **Oracle Ethics Shield (OES)**, o projeto trata governança de forma nativa, alinhado ao COBIT 2019:
 
@@ -186,7 +227,7 @@ Adotando o **Oracle Ethics Shield (OES)**, o projeto trata governança de forma 
 
 ---
 
-## 9. 📁 Estrutura do Repositório
+## 10. 📁 Estrutura do Repositório
 
 ```text
 /
@@ -198,6 +239,15 @@ Adotando o **Oracle Ethics Shield (OES)**, o projeto trata governança de forma 
 │   ├── Baixar_Populacao_IBGE.py     # Trata lacunas de estimativa do censo
 │   └── Montar_Dataset_Unificado.py  # Merge do modelo estrela (Star Schema)
 ├── sql/                             # Scripts DDL, DML validados, inserções e metadados semânticos (COMMENTS)
+├── clariti-frontend/                # Site publicado (clariti-oci.vercel.app)
+│   ├── index.html                   # Página inicial
+│   ├── executivo.html               # Nível 1 — Dashboard Executivo (KPIs, mapa, ranking, funil, scatter)
+│   ├── tatico.html                  # Nível 2 — Dashboard Tático
+│   ├── clinico.html                 # Nível 3 — Dashboard Clínico
+│   ├── metodologia.html             # Tiers dos KPIs e ressalvas metodológicas
+│   ├── chatbot.html                 # Assistente IA (Select AI)
+│   ├── css/style.css
+│   └── js/                          # api.js, nav.js, executivo.js, tatico.js, clinico.js, chatbot.js
 ├── docs/                            # Relatórios exigidos nas Sprints
 │   └── evidencias-sprint3-rm9999.pdf # PDF de documentação técnica exigido pelos mentores
 └── README.md                        # Este arquivo
@@ -205,14 +255,13 @@ Adotando o **Oracle Ethics Shield (OES)**, o projeto trata governança de forma 
 
 ---
 
-## 10. 👥 Equipe
+## 11. 👥 Equipe
 Filipe Santos de Oliveira | <a href="https://github.com/Pruppety" target="_blank"><img loading="lazy" src="https://github.com/devicons/devicon/blob/v2.17.0/icons/github/github-original.svg" target="_blank" width="20" ></a>
 
-Giovanni Pascon Corrêa | <a href="https://github.com/gigio-jpeg" target="_blank"><img loading="lazy" src="https://github.com/devicons/devicon/blob/v2.17.0/icons/github/github-original.svg" target="_blank" width="20"></a> 
+Giovanni Pascon Corrêa | <a href="https://github.com/gigio-jpeg" target="_blank"><img loading="lazy" src="https://github.com/devicons/devicon/blob/v2.17.0/icons/github/github-original.svg" target="_blank" width="20"></a>
 
-Nicolas Fois Lima | <a href="https://github.com/nifois11" target="_blank"><img loading="lazy" src="https://github.com/devicons/devicon/blob/v2.17.0/icons/github/github-original.svg" target="_blank" width="20"></a> 
+Nicolas Fois Lima | <a href="https://github.com/nifois11" target="_blank"><img loading="lazy" src="https://github.com/devicons/devicon/blob/v2.17.0/icons/github/github-original.svg" target="_blank" width="20"></a>
 
 Vitor Matias do Nascimento | <a href="https://github.com/Data-Vitor" target="_blank"><img loading="lazy" src="https://github.com/devicons/devicon/blob/v2.17.0/icons/github/github-original.svg" target="_blank" width="20"></a>
 
 Yasmin Yumi Tsunokawa | <a href="https://github.com/yasminyumit" target="_blank"><img loading="lazy" src="https://github.com/devicons/devicon/blob/v2.17.0/icons/github/github-original.svg" target="_blank" width="20"></a>
-
