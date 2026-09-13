@@ -1,10 +1,78 @@
 function appendChatMessage(log, text, type) {
   const message = document.createElement("div");
   message.className = `chat-msg ${type}`;
-  message.textContent = text;
+  if (type === "bot") {
+    renderBotText(message, text);
+  } else {
+    message.textContent = text;
+  }
   log.appendChild(message);
   log.scrollTop = log.scrollHeight;
   return message;
+}
+
+function appendInlineBotText(container, text) {
+  const parts = String(text).split(/(\*\*[^*]+\*\*|__[^_]+__)/g);
+  parts.forEach((part) => {
+    if (/^(\*\*|__).+\1$/.test(part)) {
+      const strong = document.createElement("strong");
+      strong.textContent = part.slice(2, -2);
+      container.appendChild(strong);
+    } else if (part) {
+      container.appendChild(document.createTextNode(part));
+    }
+  });
+}
+
+function renderBotText(message, text) {
+  message.replaceChildren();
+  const lines = String(text ?? "").replace(/\r/g, "").split("\n");
+  let paragraph = [];
+  let list = null;
+
+  const flushParagraph = () => {
+    if (!paragraph.length) return;
+    const element = document.createElement("p");
+    appendInlineBotText(element, paragraph.join(" ").trim());
+    message.appendChild(element);
+    paragraph = [];
+  };
+
+  const closeList = () => {
+    if (list) {
+      message.appendChild(list);
+      list = null;
+    }
+  };
+
+  lines.forEach((line) => {
+    const trimmed = line.trim();
+    if (!trimmed) {
+      flushParagraph();
+      closeList();
+      return;
+    }
+
+    const numbered = trimmed.match(/^\d+[.)]\s+(.+)$/);
+    const bullet = trimmed.match(/^[-*]\s+(.+)$/);
+    if (numbered || bullet) {
+      flushParagraph();
+      if (!list || list.tagName.toLowerCase() !== (numbered ? "ol" : "ul")) {
+        closeList();
+        list = document.createElement(numbered ? "ol" : "ul");
+      }
+      const item = document.createElement("li");
+      appendInlineBotText(item, (numbered || bullet)[1]);
+      list.appendChild(item);
+      return;
+    }
+
+    closeList();
+    paragraph.push(trimmed);
+  });
+
+  flushParagraph();
+  closeList();
 }
 
 function normalizarResposta(resposta) {
@@ -39,6 +107,8 @@ function extrairTabela(texto) {
   return pontos.length >= 2 ? { title: cabecalho[valorIndex], labels: pontos.map((ponto) => ponto.label), values: pontos.map((ponto) => ponto.value) } : null;
 }
 
+const MIN_ITENS_GRAFICO = 4;
+
 function criarGraficoResposta(message, chartData) {
   if (!window.Chart || !chartData) return;
   let labels = chartData.labels;
@@ -52,7 +122,8 @@ function criarGraficoResposta(message, chartData) {
     }
   }
   values = values ?? chartData.data;
-  if (!Array.isArray(labels) || !Array.isArray(values) || labels.length !== values.length || !labels.length) return;
+  if (!Array.isArray(labels) || !Array.isArray(values) || labels.length !== values.length || labels.length < MIN_ITENS_GRAFICO) return;
+  if (values.some((value) => !Number.isFinite(Number(value)))) return;
 
   const canvas = document.createElement("canvas");
   canvas.className = "chat-response-chart";
@@ -126,11 +197,11 @@ function initChatPage() {
     try {
       const resposta = await askClaritiAI(question);
       const normalized = normalizarResposta(resposta);
-      waiting.textContent = normalized.text;
+      renderBotText(waiting, normalized.text);
       criarGraficoResposta(waiting, normalized.chart);
     } catch (error) {
       console.error("Falha ao consultar o Select AI:", error);
-      waiting.textContent = "Não foi possível consultar o Select AI. Verifique o endpoint e a conexão com o ORDS.";
+      renderBotText(waiting, "Não foi possível consultar o Select AI. Verifique o endpoint e a conexão com o ORDS.");
     } finally {
       input.disabled = false;
       input.focus();
