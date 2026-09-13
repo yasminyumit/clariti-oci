@@ -16,7 +16,7 @@
   --line: #D6E2ED;
   --muted: #718096;
   --radius: 3px;
-  --sidebar-width: 290px;
+  --sidebar-width: 240px;
   --font-display: 'Source Serif 4', Georgia, serif;
   --font-ui: 'Inter', -apple-system, sans-serif;
   --font-num: 'IBM Plex Mono', ui-monospace, monospace;
@@ -847,7 +847,7 @@ footer {
   .map-panel-head { display: block; }
   .map-legend { margin: 8px 0 12px; }
   .icsap-map { height: 320px; }
-  .side-menu { width: min(290px, 86vw); }
+  .side-menu { width: min(280px, 86vw); }
   .chat-card { min-height: 440px; }
   .chat-card .chat-log { min-height: 290px; padding: 16px; }
 }
