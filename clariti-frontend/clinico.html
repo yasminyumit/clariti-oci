@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Clínico — CLARITI</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="topnav">
+  <div class="topnav-inner">
+    <button id="menu-toggle" class="menu-toggle" aria-label="Abrir menu" aria-expanded="false">☰</button>
+    <a href="index.html" class="brand">CLARITI<span>.</span></a>
+    <nav class="nav-links">
+      <a href="index.html">Início</a>
+      <a href="executivo.html">Executivo</a>
+      <a href="tatico.html">Tático</a>
+      <a href="clinico.html">Clínico</a>
+      <a href="metodologia.html">Metodologia</a>
+    </nav>
+    <div class="nav-controls">
+      <select id="year-select" class="year-select" aria-label="Ano de referência"></select>
+    </div>
+  </div>
+</header>
+<aside id="side-menu" class="side-menu" aria-label="Menu lateral"><div class="side-menu-head"><span>CLARITI</span><button id="menu-close" aria-label="Fechar menu">×</button></div><div class="side-menu-context">Inteligência para a gestão pública</div><nav class="side-links"><a href="index.html">Início <span>01</span></a><a href="executivo.html">Executivo <span>02</span></a><a href="tatico.html">Tático <span>03</span></a><a href="clinico.html">Clínico <span>04</span></a><a href="metodologia.html">Metodologia <span>05</span></a><a href="chatbot.html" class="side-ai">Assistente IA <span>→</span></a></nav></aside><div id="nav-overlay" class="nav-overlay"></div>
+
+<main>
+  <div class="shell">
+    <div class="page-header">
+      <div class="breadcrumb"><a href="executivo.html">Executivo</a> / <a href="tatico.html">Tático</a> / Clínico</div>
+      <div class="eyebrow">NÍVEL 3 · PERFIL ASSISTENCIAL AGREGADO</div>
+      <div class="page-header-row">
+        <div>
+          <h1 id="titulo-diag">Dashboard Clínico</h1>
+          <p>Perfil agregado dos casos por trás do diagnóstico selecionado.</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="conteudo-clinico">
+      <!-- preenchido via JS; mostra empty-state se nenhum diagnóstico foi selecionado -->
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="shell">CLARITI — Oracle + FIAP Challenge 2026. Fontes: SIH/SUS, CNES, SIOPS, IBGE.</div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script src="js/api.js"></script>
+<script src="js/nav.js"></script>
+<script src="js/clinico.js"></script>
+</body>
+</html>

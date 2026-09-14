@@ -11,7 +11,7 @@
 <header class="topnav">
   <div class="topnav-inner">
     <button id="menu-toggle" class="menu-toggle" aria-label="Abrir menu" aria-expanded="false">☰</button>
- 
+    <a href="index.html" class="brand">CLARITI<span>.</span></a>
     <nav class="nav-links">
       <a href="index.html">Início</a>
       <a href="executivo.html">Executivo</a>
@@ -48,32 +48,22 @@
 
     <div class="tier-block">
       <span class="tier-tag tier-3">TIER 3 — NÃO VIRA GATILHO AUTOMÁTICO</span>
-      <p style="margin:0;">O indicador tem um problema metodológico conhecido que compromete a interpretação causal ou temporal. Pode aparecer em relatório técnico ou em uma ordenação territorial descritiva, mas nunca como alerta automático, ranking de qualidade ou decisão clínica. Ex.: reinternação em 30 dias — a internação precisa ser observada e a alta precisa ocorrer para que a reinternação seja registrada, o que pode distorcer comparações entre municípios com perfis de gravidade diferentes.</p>
+      <p style="margin:0;">O indicador tem um problema metodológico conhecido que compromete a interpretação causal ou temporal. Pode aparecer em relatório técnico, nunca como alerta automático ou ranking de prioridade. Ex.: reinternação em 30 dias — o paciente precisa sobreviver e receber alta para "contar" como reinternação, o que distorce a comparação entre municípios com perfis de gravidade diferentes.</p>
     </div>
 
-    <div class="data-quality-highlight">
-      <p>
-        No projeto CLARITI, a precisão analítica e a confiabilidade são prioridades. Como
-        as bases públicas do SIH/SUS não possuem um identificador único de paciente (como
-        o CPF) por questões de privacidade, o sistema constrói uma chave temporária
-        combinada para conseguir rastrear taxas de reinternação.
-      </p>
-      <p>
-        Contudo, essa estratégia metodológica está estatisticamente sujeita a colisões,
-        cenário em que dois pacientes diferentes acabam gerando a mesma chave. Para
-        proteger a integridade da análise, o sistema identifica essas anomalias e as
-        retira dos cálculos principais. Sendo assim, essas colisões não são exibidas no
-        painel público do gestor como um indicador de saúde, mas vivem em uma trilha de
-        auditoria administrativa exclusiva, funcionando como um rigoroso indicador de
-        <strong>qualidade de dados</strong>.
-      </p>
-      <p class="data-quality-sources">Fontes integradas: SIH/SUS, CNES, IBGE (SIDRA/API) e SIOPS.</p>
-    </div>
+    <h2 style="margin-top:36px;">Qualidade de dados</h2>
+    <p>
+      O SIH/SUS não possui identificador único de paciente. A chave usada para
+      identificar reinternações é construída por combinação de campos e está sujeita a
+      colisão (dois pacientes diferentes podem gerar a mesma chave). Isso não é um
+      indicador de saúde — é um indicador de qualidade de dados, e por isso vive numa
+      trilha de auditoria administrativa, não no painel público do gestor.
+    </p>
   </div>
 </main>
 
 <footer>
-  <div class="shell">CLARITI — Oracle + FIAP Challenge 2026. Fontes: SIH/SUS, CNES, IBGE (SIDRA/API), SIOPS.</div>
+  <div class="shell">CLARITI — Oracle + FIAP Challenge 2026. Fontes: SIH/SUS, CNES, SIOPS, IBGE.</div>
 </footer>
 
 <script src="js/api.js"></script>

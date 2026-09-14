@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Risco de reinternação — CLARITI</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="topnav">
+  <div class="topnav-inner">
+    <button id="menu-toggle" class="menu-toggle" aria-label="Abrir menu" aria-expanded="false">☰</button>
+    <nav class="nav-links" aria-label="Navegação principal">
+      <a href="index.html">Início</a>
+      <a href="executivo.html">Executivo</a>
+      <a href="tatico.html">Tático</a>
+      <a href="clinico.html">Clínico</a>
+      <a href="risco.html">Risco 30 dias</a>
+      <a href="metodologia.html">Metodologia</a>
+    </nav>
+    <div class="nav-controls">
+      <select id="year-select" class="year-select" aria-label="Ano de referência"></select>
+    </div>
+  </div>
+</header>
+
+<aside id="side-menu" class="side-menu" aria-label="Menu lateral">
+  <div class="side-menu-head"><span>CLARITI</span><button id="menu-close" aria-label="Fechar menu">×</button></div>
+  <div class="side-menu-context">Inteligência para a gestão pública</div>
+  <nav class="side-links">
+    <a href="index.html">Início <span>01</span></a>
+    <a href="executivo.html">Executivo <span>02</span></a>
+    <a href="tatico.html">Tático <span>03</span></a>
+    <a href="clinico.html">Clínico <span>04</span></a>
+    <a href="risco.html">Risco 30 dias <span>05</span></a>
+    <a href="metodologia.html">Metodologia <span>06</span></a>
+    <a href="chatbot.html" class="side-ai">Assistente IA <span>→</span></a>
+  </nav>
+</aside>
+<div id="nav-overlay" class="nav-overlay"></div>
+
+<main>
+  <div class="shell">
+    <div class="page-header">
+      <div class="eyebrow">MÓDULO 4 · CAMADA PREVENTIVA</div>
+      <div class="page-header-row">
+        <div>
+          <h1>Risco estimado de reinternação</h1>
+          <p>O CLARITI identifica onde se concentram internações com maior risco estimado de nova internação em UTI em até 30 dias, apoiando o planejamento territorial e a priorização de acompanhamento.</p>
+        </div>
+        <button id="carregar-risco-btn" class="generate-btn">Atualizar dados</button>
+      </div>
+    </div>
+
+    <div id="risco-kpis" class="kpi-row risco-kpi-row"></div>
+
+    <div class="callout risco-framing">
+      Esta visão apoia o planejamento territorial e a priorização de acompanhamento. Ela descreve risco estimado em grupos de internações avaliadas, não certeza de reinternação, diagnóstico ou conduta clínica individual.
+    </div>
+
+    <div class="risk-layout">
+      <section class="panel risk-ranking-panel" aria-labelledby="ranking-risco-title">
+        <div class="section-heading ranking-section-heading">
+          <div class="section-kicker">VISÃO TERRITORIAL</div>
+          <h2 id="ranking-risco-title">Ranking municipal</h2>
+          <p>Ordenação descritiva por risco estimado. Selecione um município para consultar a distribuição por faixa.</p>
+        </div>
+        <div id="risco-ranking" class="risk-ranking"></div>
+      </section>
+
+      <section class="panel risk-detail-panel" aria-labelledby="detalhe-risco-title">
+        <div class="section-heading">
+          <div class="section-kicker">DRILL-DOWN</div>
+          <h2 id="detalhe-risco-title">Distribuição por faixa</h2>
+          <p id="detalhe-risco-subtitle">Nenhum município selecionado.</p>
+        </div>
+        <div id="risco-detalhe" class="risk-detail-empty">Clique em um município do ranking.</div>
+      </section>
+    </div>
+
+    <div class="callout tier-3-callout">
+      <strong>Nota metodológica Tier 3:</strong> o modelo usa uma janela de 30 dias e está sujeito a viés de sobrevivência: a internação precisa ser observada e a alta precisa ocorrer para que a reinternação seja registrada. O resultado deve orientar leitura territorial agregada, não avaliação de qualidade entre municípios, gatilho automático ou decisão clínica individual.
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="shell">CLARITI — Oracle + FIAP Challenge 2026. Fontes: SIH/SUS, CNES, IBGE (SIDRA/API), SIOPS.</div>
+</footer>
+
+<script src="js/api.js"></script>
+<script src="js/nav.js"></script>
+<script src="js/risco.js"></script>
+</body>
+</html>
