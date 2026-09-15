@@ -86,19 +86,27 @@ function normalizarResposta(resposta) {
         return { text: resposta, chart: null };
       }
     }
-    const chart = extrairTabela(resposta);
-    return { text: chart ? removerTabelaMarkdown(resposta) : resposta, chart };
+    return montarTextoEGrafico(resposta);
   }
   const text = resposta?.text ?? resposta?.resposta ?? "";
   const chartExplicito = resposta?.chart ?? resposta?.grafico ?? null;
   if (chartExplicito) return { text, chart: chartExplicito };
-
-  const chart = extrairTabela(text);
-  return { text: chart ? removerTabelaMarkdown(text) : text, chart };
+  return montarTextoEGrafico(text);
 }
 
-// Remove as linhas da tabela markdown (usada só pra montar o gráfico) do texto
-// exibido no chat, pra não aparecer "| Município | Taxa |" cru na conversa.
+// Sempre esconde qualquer trecho que pareça tabela markdown (linhas "| ... |")
+// da mensagem exibida no chat, tenha ou não virado gráfico — o usuário nunca
+// deve ver "| Município | | --- | |" cru, mesmo quando a IA não manda uma
+// coluna de valor numérico (e por isso extrairTabela não consegue montar chart).
+function montarTextoEGrafico(texto) {
+  const chart = extrairTabela(texto);
+  const temTabela = texto.split("\n").some((linha) => {
+    const trimmed = linha.trim();
+    return trimmed.startsWith("|") && trimmed.endsWith("|") && trimmed.length > 1;
+  });
+  return { text: temTabela ? removerTabelaMarkdown(texto) : texto, chart };
+}
+
 function removerTabelaMarkdown(texto) {
   return texto
     .split("\n")

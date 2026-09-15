@@ -239,10 +239,13 @@ function resetConversationId() {
 // tabela (e só ela) que vira gráfico em chatbot.js::extrairTabela — nunca uma
 // consulta paralela, pra garantir que texto e gráfico usem os mesmos números.
 const INSTRUCAO_TABELA =
-  "Se a resposta envolver um ranking, comparação ou lista de valores numéricos, " +
-  "inclua também, ao final, uma tabela em formato markdown (colunas separadas por |, " +
-  "com linha de cabeçalho e linha separadora) repetindo exatamente os mesmos itens e " +
-  "valores já citados no texto — não adicione itens novos nem diferentes dos citados.";
+  "Se a resposta envolver um ranking, comparação ou lista de itens com valor numérico, " +
+  "cite o valor numérico de cada item também no texto (ex.: \"1. Nome do item — 42,1\") e, " +
+  "ao final, inclua uma tabela em formato markdown com exatamente duas colunas — nome do " +
+  "item e valor numérico — (colunas separadas por |, com linha de cabeçalho e linha " +
+  "separadora), repetindo exatamente os mesmos itens e valores já citados no texto, sem " +
+  "adicionar itens novos ou diferentes. Se a pergunta não envolver valores numéricos por " +
+  "item, não inclua tabela nenhuma.";
 
 async function askClaritiAI(pergunta) {
   const conversationId = getConversationId(); // null na primeira pergunta
