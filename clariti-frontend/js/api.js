@@ -234,6 +234,16 @@ function resetConversationId() {
   localStorage.removeItem(CONVERSATION_ID_KEY);
 }
 
+// Anexada à pergunta do usuário — pede pra Select AI sempre incluir, no próprio
+// texto da resposta, uma tabela markdown com os valores exatos citados. É essa
+// tabela (e só ela) que vira gráfico em chatbot.js::extrairTabela — nunca uma
+// consulta paralela, pra garantir que texto e gráfico usem os mesmos números.
+const INSTRUCAO_TABELA =
+  "Se a resposta envolver um ranking, comparação ou lista de valores numéricos, " +
+  "inclua também, ao final, uma tabela em formato markdown (colunas separadas por |, " +
+  "com linha de cabeçalho e linha separadora) repetindo exatamente os mesmos itens e " +
+  "valores já citados no texto — não adicione itens novos nem diferentes dos citados.";
+
 async function askClaritiAI(pergunta) {
   const conversationId = getConversationId(); // null na primeira pergunta
 
@@ -244,7 +254,7 @@ async function askClaritiAI(pergunta) {
     );
   }
 
-  const body = { prompt: pergunta };
+  const body = { prompt: `${pergunta}\n\n${INSTRUCAO_TABELA}` };
   if (conversationId) body.conversation_id = conversationId; // só manda se já existir
 
   const data = await claritiFetch(CLARITI_CONFIG.SELECT_AI_ENDPOINT, {
@@ -258,48 +268,14 @@ async function askClaritiAI(pergunta) {
     setConversationId(data.conversation_id);
   }
 
+  // Sem campo de gráfico explícito do backend: o gráfico só pode vir da própria
+  // resposta (tabela markdown extraída do texto, ver chatbot.js::extrairTabela).
+  // Nunca de uma consulta paralela — isso é o que causava gráfico e texto
+  // mostrando dados diferentes.
   return {
     text: data.resposta ?? data.resposta_texto ?? data.message ?? "",
-    chart: data.grafico ?? data.chart ?? data.visualizacao ?? await graficoParaPergunta(pergunta),
+    chart: data.grafico ?? data.chart ?? data.visualizacao ?? null,
   };
-}
-
-async function graficoParaPergunta(pergunta) {
-  const texto = String(pergunta).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-  try {
-    if (texto.includes("municip") && (texto.includes("icsap") || texto.includes("taxa"))) {
-      const dados = await getPainelExecutivo(anoAtualSelecionado());
-      return {
-        title: "Municípios com maior taxa de ICSAP",
-        type: "bar",
-        data: dados.ranking_icsap,
-      };
-    }
-    if (texto.includes("empenhado") || texto.includes("liquidado") || texto.includes("orcament")) {
-      const dados = await getPainelExecutivo(anoAtualSelecionado());
-      return {
-        title: "Execução orçamentária",
-        labels: ["Dotação", "Empenhado", "Liquidado", "Pago"],
-        values: [dados.funil.dotacao, dados.funil.empenhado, dados.funil.liquidado, dados.funil.pago],
-      };
-    }
-    if (texto.includes("diagnostico") || texto.includes("internac") || texto.includes("custo")) {
-      const municipioCodigo = localStorage.getItem("clariti_municipio_6");
-      if (!municipioCodigo) return null;
-      const dados = await getPainelTatico(municipioCodigo, anoAtualSelecionado());
-      return { title: "Diagnósticos do município", data: dados.diagnosticos };
-    }
-    if (texto.includes("clinico") || texto.includes("paciente") || texto.includes("perfil")) {
-      const municipioCodigo = localStorage.getItem("clariti_municipio_6");
-      const diagnostico = localStorage.getItem("clariti_diag_princ");
-      if (!municipioCodigo || !diagnostico) return null;
-      const dados = await getPainelClinico(municipioCodigo, anoAtualSelecionado(), "", diagnostico);
-      return { title: "Perfil clínico", data: dados.grupo_csap };
-    }
-  } catch (error) {
-    console.warn("Não foi possível preparar o gráfico contextual:", error);
-  }
-  return null;
 }
 
 /* ------------------------------------------------------------------ */

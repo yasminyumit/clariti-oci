@@ -86,12 +86,34 @@ function normalizarResposta(resposta) {
         return { text: resposta, chart: null };
       }
     }
-    return { text: resposta, chart: extrairTabela(resposta) };
+    const chart = extrairTabela(resposta);
+    return { text: chart ? removerTabelaMarkdown(resposta) : resposta, chart };
   }
-  return {
-    text: resposta?.text ?? resposta?.resposta ?? "",
-    chart: resposta?.chart ?? resposta?.grafico ?? null,
-  };
+  const text = resposta?.text ?? resposta?.resposta ?? "";
+  const chartExplicito = resposta?.chart ?? resposta?.grafico ?? null;
+  if (chartExplicito) return { text, chart: chartExplicito };
+
+  const chart = extrairTabela(text);
+  return { text: chart ? removerTabelaMarkdown(text) : text, chart };
+}
+
+// Remove as linhas da tabela markdown (usada só pra montar o gráfico) do texto
+// exibido no chat, pra não aparecer "| Município | Taxa |" cru na conversa.
+function removerTabelaMarkdown(texto) {
+  return texto
+    .split("\n")
+    .filter((linha) => !(linha.trim().startsWith("|") && linha.trim().endsWith("|")))
+    .join("\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
+function paraNumeroTabela(valor) {
+  let limpo = String(valor ?? "").trim().replace(/[^\d,.-]/g, "");
+  if (limpo === "" || limpo === "-") return NaN;
+  // Formato BR (ex.: "772.972.627,23"): ponto é separador de milhar, vírgula é decimal.
+  if (limpo.includes(",")) limpo = limpo.replace(/\./g, "").replace(",", ".");
+  return Number(limpo);
 }
 
 function extrairTabela(texto) {
@@ -100,10 +122,24 @@ function extrairTabela(texto) {
 
   const cabecalho = linhas[0].split("|").slice(1, -1).map((item) => item.trim());
   const dados = linhas.slice(2).map((linha) => linha.split("|").slice(1, -1).map((item) => item.trim()));
-  const valorIndex = cabecalho.findIndex((_item, index) => dados.some((linha) => Number(linha[index]?.replace(/[^\d,.-]/g, "").replace(",", ".")) === Number(linha[index]?.replace(/[^\d,.-]/g, "").replace(",", "."))));
+
+  // Escolhe a coluna com mais células numéricas de verdade, ignorando a
+  // primeira (é sempre o rótulo/nome do item na tabela pedida à IA).
+  let valorIndex = -1;
+  let melhorContagem = 0;
+  cabecalho.forEach((_item, index) => {
+    if (index === 0) return;
+    const contagem = dados.filter((linha) => Number.isFinite(paraNumeroTabela(linha[index]))).length;
+    if (contagem > melhorContagem) {
+      melhorContagem = contagem;
+      valorIndex = index;
+    }
+  });
   if (valorIndex < 0) return null;
 
-  const pontos = dados.map((linha) => ({ label: linha[0], value: Number(linha[valorIndex].replace(/[^\d,.-]/g, "").replace(",", ".")) })).filter((ponto) => ponto.label && Number.isFinite(ponto.value));
+  const pontos = dados
+    .map((linha) => ({ label: linha[0], value: paraNumeroTabela(linha[valorIndex]) }))
+    .filter((ponto) => ponto.label && Number.isFinite(ponto.value));
   return pontos.length >= 2 ? { title: cabecalho[valorIndex], labels: pontos.map((ponto) => ponto.label), values: pontos.map((ponto) => ponto.value) } : null;
 }
 
