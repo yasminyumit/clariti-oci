@@ -5,13 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dashboard Executivo — CLARITI</title>
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 </head>
 <body>
 
 <header class="topnav">
   <div class="topnav-inner">
     <button id="menu-toggle" class="menu-toggle" aria-label="Abrir menu" aria-expanded="false">☰</button>
-    <a href="index.html" class="brand">CLARITI<span>.</span></a>
+    
     <nav class="nav-links">
       <a href="index.html">Início</a>
       <a href="executivo.html">Executivo</a>
@@ -26,10 +27,10 @@
 </header>
 
 <aside id="side-menu" class="side-menu" aria-label="Menu lateral">
-  <div class="side-menu-head"><span>CLARITI</span><button id="menu-close" aria-label="Fechar menu">×</button></div>
+  <div class="side-menu-head"><span class="side-menu-head-brand"><img src="imagens/clariti-icon.png" alt="" width="30" height="31">CLARITI</span><button id="menu-close" aria-label="Fechar menu">×</button></div>
   <div class="side-menu-context">Inteligência para a gestão pública</div>
   <nav class="side-links">
-    <a href="index.html">Início <span>01</span></a><a href="executivo.html">Executivo <span>02</span></a><a href="tatico.html">Tático <span>03</span></a><a href="clinico.html">Clínico <span>04</span></a><a href="metodologia.html">Metodologia <span>05</span></a><a href="chatbot.html" class="side-ai">Assistente IA <span>→</span></a>
+    <a href="index.html">Início <span>01</span></a><a href="executivo.html">Executivo <span>02</span></a><a href="tatico.html">Tático <span>03</span></a><a href="clinico.html">Clínico <span>04</span></a><a href="metodologia.html">Metodologia <span>05</span></a><a href="chatbot.html" class="side-ai">Athena <span>→</span></a>
   </nav>
 </aside><div id="nav-overlay" class="nav-overlay"></div>
 
@@ -50,10 +51,38 @@
       <!-- preenchido via JS -->
     </div>
 
+    <section class="municipio-guide" aria-labelledby="municipio-guide-title">
+      <div class="municipio-guide-intro">
+        <div class="eyebrow">COMO COMEÇAR</div>
+        <h2 id="municipio-guide-title">Escolha um município para aprofundar a análise</h2>
+        <p>Esta visão mostra o cenário geral de São Paulo. Para acessar os níveis Tático e Clínico, primeiro selecione um município no mapa ou no ranking abaixo.</p>
+      </div>
+      <ol class="municipio-steps">
+        <li><strong>1</strong><span><b>Escolha</b> um município</span></li>
+        <li><strong>2</strong><span><b>Entenda</b> os diagnósticos e custos</span></li>
+        <li><strong>3</strong><span><b>Aprofunde</b> o perfil dos pacientes</span></li>
+      </ol>
+    </section>
+
+    <div class="panel panel-full map-panel">
+      <div class="map-panel-head">
+        <div>
+          <h3 class="panel-title">Mapa de municípios — Taxa de ICSAP</h3>
+          <p class="panel-note">Clique em um município para selecioná-lo e abrir o nível Tático.</p>
+        </div>
+        <div class="map-legend" aria-label="Legenda da taxa de ICSAP">
+          <span><i class="legend-dot low"></i> menor</span>
+          <span><i class="legend-dot high"></i> maior</span>
+        </div>
+      </div>
+      <div id="icsap-map" class="icsap-map" aria-label="Mapa interativo de municípios de São Paulo"></div>
+      <div id="map-unavailable" class="data-unavailable" hidden>Mapa indisponível para este ano.</div>
+    </div>
+
     <div class="panel-grid">
       <div class="panel">
         <h3 class="panel-title">Ranking de municípios — Taxa de ICSAP</h3>
-        <p class="panel-note">Top 15 municípios por % de internações sensíveis à atenção primária. Clique numa barra para abrir o nível tático.</p>
+        <p class="panel-note">Também é possível escolher pelo ranking: clique em uma barra para abrir o nível Tático.</p>
         <canvas id="chart-ranking"></canvas>
       </div>
 
@@ -79,10 +108,11 @@
 </main>
 
 <footer>
-  <div class="shell">CLARITI — Oracle + FIAP Challenge 2026. Fontes: SIH/SUS, CNES, SIOPS, IBGE.</div>
+  <div class="shell">CLARITI — Oracle + FIAP Challenge 2026. Fontes: SIH/SUS, CNES, IBGE (SIDRA/API), SIOPS.</div>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="js/api.js"></script>
 <script src="js/nav.js"></script>
 <script src="js/executivo.js"></script>

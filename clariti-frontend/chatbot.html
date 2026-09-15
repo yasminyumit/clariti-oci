@@ -3,22 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Assistente IA — CLARITI</title>
+<title>Athena — Assistente CLARITI</title>
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 <header class="topnav">
   <div class="topnav-inner">
     <button id="menu-toggle" class="menu-toggle" aria-label="Abrir menu" aria-expanded="false">☰</button>
-    <a href="index.html" class="brand">CLARITI<span>.</span></a>
+    <a href="index.html" class="brand"><img src="imagens/clariti-icon.png" class="brand-logo" alt="" width="26" height="27">CLARITI<span>.</span></a>
     <div class="nav-controls">
-      <span class="page-context">Assistente de dados</span>
+      <span class="page-context">Athena · Assistente de dados</span>
       <select id="year-select" class="year-select" aria-label="Ano de referência"></select>
     </div>
   </div>
 </header>
 <aside id="side-menu" class="side-menu" aria-label="Menu lateral">
-  <div class="side-menu-head"><span>CLARITI</span><button id="menu-close" aria-label="Fechar menu">×</button></div>
+  <div class="side-menu-head"><span class="side-menu-head-brand"><img src="imagens/clariti-icon.png" alt="" width="30" height="31">CLARITI</span><button id="menu-close" aria-label="Fechar menu">×</button></div>
   <div class="side-menu-context">Inteligência para a gestão pública</div>
   <nav class="side-links">
     <a href="index.html">Início <span>01</span></a>
@@ -26,7 +26,7 @@
     <a href="tatico.html">Tático <span>03</span></a>
     <a href="clinico.html">Clínico <span>04</span></a>
     <a href="metodologia.html">Metodologia <span>05</span></a>
-    <a href="chatbot.html" class="side-ai">Assistente IA <span>→</span></a>
+    <a href="chatbot.html" class="side-ai">Athena <span>→</span></a>
   </nav>
 </aside>
 <div id="nav-overlay" class="nav-overlay"></div>
@@ -34,14 +34,15 @@
 <main>
   <div class="shell chatbot-shell">
     <div class="page-header chatbot-header">
+      <div class="athena-badge"><img src="imagens/athena-crop.png" alt="Athena" width="70" height="34"><span>Athena</span></div>
       <div class="eyebrow">CLARITI INTELLIGENCE · SELECT AI</div>
       <h1>Converse com os dados da saúde pública.</h1>
       <p>Faça perguntas em linguagem natural sobre ICSAP, orçamento e capacidade hospitalar. A resposta considera o ano selecionado no painel.</p>
     </div>
 
-    <section class="chat-workspace" aria-label="Assistente CLARITI">
+    <section class="chat-workspace" aria-label="Athena — assistente CLARITI">
       <div class="chat-intro">
-        <span class="chat-status"><i></i> Assistente conectado</span>
+        <span class="chat-status"><i></i> Athena conectada</span>
         <h2>O que você quer entender?</h2>
         <p>Use o contexto dos dashboards para investigar variações, comparar municípios e encontrar pontos de atenção.</p>
         <div class="prompt-list">
@@ -52,17 +53,19 @@
       </div>
       <div class="chat-card">
         <div id="chat-log" class="chat-log" aria-live="polite">
-          <div class="chat-msg bot">Olá. Posso ajudar a interpretar os indicadores do CLARITI. Qual recorte você quer investigar?</div>
+          <div class="chat-msg bot">Olá, eu sou a Athena. Posso ajudar a interpretar os indicadores do CLARITI. Qual recorte você quer investigar?</div>
         </div>
         <form id="chat-form" class="chat-input-row">
-          <input id="chat-input" type="text" placeholder="Pergunte sobre ICSAP, orçamento ou leitos..." autocomplete="off" aria-label="Pergunta para o assistente">
+          <input id="chat-input" type="text" placeholder="Pergunte sobre ICSAP, orçamentos ou leitos..." autocomplete="off" aria-label="Pergunta para o assistente">
           <button type="submit">Enviar <span>→</span></button>
         </form>
+        <button id="nova-conversa-btn" type="button" class="chat-reset-btn">Nova conversa</button>
       </div>
     </section>
   </div>
 </main>
-<footer><div class="shell">CLARITI — Oracle + FIAP Challenge 2026. Fontes: SIH/SUS, CNES, SIOPS, IBGE.</div></footer>
+<footer><div class="shell">CLARITI — Oracle + FIAP Challenge 2026. Fontes: SIH/SUS, CNES, IBGE (SIDRA/API), SIOPS.</div></footer>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 <script src="js/api.js"></script>
 <script src="js/nav.js"></script>
 <script src="js/chatbot.js"></script>

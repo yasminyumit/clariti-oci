@@ -40,6 +40,28 @@ function marcarLinkAtivo() {
   });
 }
 
+function initRiskNavigation() {
+  document.querySelectorAll(".nav-links, .side-links").forEach((nav) => {
+    if (nav.querySelector('a[href="risco.html"]')) return;
+    const link = document.createElement("a");
+    link.href = "risco.html";
+    link.textContent = nav.classList.contains("side-links") ? "Risco 30 dias" : "Risco 30 dias";
+    if (nav.classList.contains("side-links")) {
+      const marker = document.createElement("span");
+      marker.textContent = "05";
+      link.append(" ", marker);
+    }
+    const methodologyLink = nav.querySelector('a[href="metodologia.html"]');
+    if (methodologyLink) {
+      nav.insertBefore(link, methodologyLink);
+      const methodologyMarker = methodologyLink.querySelector("span");
+      if (methodologyMarker) methodologyMarker.textContent = "06";
+    } else {
+      nav.appendChild(link);
+    }
+  });
+}
+
 function initSidebar() {
   const menu = document.getElementById("side-menu");
   const toggle = document.getElementById("menu-toggle");
@@ -76,6 +98,7 @@ function irParaClinico(diagPrinc) {
 document.addEventListener("DOMContentLoaded", () => {
   initYearSelect();
   initModeBadge();
+  initRiskNavigation();
   marcarLinkAtivo();
   initSidebar();
 });
