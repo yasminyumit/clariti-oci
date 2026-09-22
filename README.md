@@ -192,16 +192,34 @@ Um dos indicadores mais sensíveis do CLARITI é `FL_REINTERNACAO_30D`, que sina
 
 ---
 
-## 7. 💬 Select AI: Autonomia para o Gestor
+## 7. 💬 Athena: agente de consulta governado (Select AI)
 
-O CLARITI dá autonomia total aos gestores de saúde, permitindo explorar a base sem qualquer conhecimento em SQL. Para que o Select AI responda com precisão, toda a estrutura DDL foi enriquecida com `COMMENT ON TABLE` e `COMMENT ON COLUMN`, traduzindo nomes técnicos em contexto gerencial.
+A Athena é o assistente do CLARITI. O gestor pergunta em português e recebe uma resposta produzida a partir dos dados governados no Oracle, sem precisar escrever SQL.
 
-O endpoint está publicado via ORDS e testado em produção, incluindo continuidade de contexto entre perguntas (`conversation_id`) dentro da mesma sessão do assistente — o gestor pode fazer uma pergunta de acompanhamento sem repetir o contexto.
+A diferença entre apenas ativar o Select AI e governá-lo está em três decisões:
 
-**Exemplos de pergunta que o painel responde:**
-- *"Quais municípios estão com maior pressão assistencial?"*
-- *"Quais hospitais apresentam maior permanência média?"*
-- *"Compare internações e leitos disponíveis por região de saúde."*
+**Enriquecimento semântico.** Os objetos disponibilizados ao Select AI possuem `COMMENT ON TABLE` e `COMMENT ON COLUMN`, traduzindo nomes técnicos para a linguagem de negócio. O perfil `CLARITI_SAFE_PROFILE` também restringe quais objetos podem ser consultados por meio de `enforce_object_list`.
+
+**Vocabulário controlado de CID-10.** O CID-10 está integrado pela view enriquecida `CLARITI_DEV.VW_DIAG_MUN_ANO_K5` e pela Tool `CLARITI_DIAG_K5_TOOL`, conectada à função `CLARITI_DEV.FN_TOP_DIAG_GESTOR_K5`.
+
+As tabelas de referência `TB_CID10_FONTE` e `TB_CID10_REFERENCIA` não ficam abertas para consulta livre pelo agente. O Oracle devolve código oficial, descrição e versão já governados. Assim, a Athena reproduz o dicionário CID-10 DATASUS V2008 armazenado no banco, em vez de completar diagnósticos pela memória do modelo de linguagem.
+
+A carga contém 14.233 códigos únicos e cobre os 1.599 códigos utilizados pelo CLARITI. A view publicou 26.136 células município × ano × CID, sem descrição ausente e sem violação da política k=5.
+
+**Continuidade de contexto.** Cada conversa recebe um `conversation_id`, criado por `DBMS_CLOUD_AI.CREATE_CONVERSATION()`. A aplicação deve guardar esse identificador durante a sessão e reutilizá-lo nas perguntas seguintes. O botão “Nova conversa” gera outro identificador.
+
+O perfil utiliza o provider Cohere, o modelo `command-a-03-2025` e a credencial Oracle `COHERE_CRED`.
+
+### Perguntas homologadas
+
+| Pergunta | Resposta comprovada da Athena |
+|---|---|
+| “Quais foram os cinco diagnósticos principais mais frequentes nas internações UTI de Colina em 2024?” | A41.9 — Septicemia não especificada: 14 internações; N39.0 — Infecção do trato urinário de localização não especificada: 12; I21.9 — Infarto agudo do miocárdio não especificado: 11; I64 — Acidente vascular cerebral, não especificado como hemorrágico ou isquêmico: 10; J15.9 — Pneumonia bacteriana não especificada: 10. Todos retornados com a versão `CID-10 DATASUS V2008`. |
+| “Qual foi o mês de pico histórico das internações UTI do grupo CSAP Asma?” | Agosto, com 608 internações. Janeiro teve a menor contagem, 190. O histórico contém 4.402 internações e média mensal de 366,83. A Athena esclarece que o padrão histórico não é uma previsão. |
+| “O modelo consegue priorizar quando a capacidade é limitada?” | No grupo formado pelos 10% de maior escore, 45,7205% das internações apresentaram o desfecho no teste de 2024, contra 14,8483% no conjunto completo. Lift de 3,079179 em 248.507 internações avaliadas. |
+| “Qual a taxa de reinternação para pessoas de 60 a 69 anos com insuficiência cardíaca em Altinópolis em 2023?” | O recorte municipal ficou abaixo da política k=5. A Athena não publicou o valor municipal e aplicou fallback para o polo de Ribeirão Preto: 226 internações, 30 reinternações e taxa de 13,27%, diante de 11,97% no estado. |
+
+A Athena utiliza sete Tools governadas para separar consultas gerais, reinternação, diagnósticos, sazonalidade, priorização por ML, explicabilidade e alternativas gerenciais. As respostas preservam o recorte, a unidade analisada e os limites de interpretação.
 
 ---
 
